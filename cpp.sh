@@ -1,7 +1,10 @@
 #!/bin/bash
-noFileEr="No files passed !!"
+errorStart="cpp-interpreter Error: "
+logStart="cpp-interpreter: "
+noFileError="$errorStart No files passed !!"
+
 if [ $# -eq 0 ]; then
-  echo $noFileEr
+  echo $noFileError
   exit 1
 fi
 
@@ -14,11 +17,11 @@ done
 
 if [[ "$dir" == "" ]]; then 
   if [[ $# -eq 0 ]]; then 
-    echo $noFileEr
+    echo $noFileError
     exit 1
   fi
 elif [[ $# -lt 2 ]]; then 
-    echo $noFileEr
+    echo $noFileError
     exit 1
 fi
 
@@ -35,10 +38,12 @@ do
       fi
       g++ "$input" -o "$output"
       if [ $? -eq 0 ]; then 
+        echo "$logStart running $input"
         "$output"
+        printf "\n"
       fi
     else 
-      echo "File $input not found !!"
+      echo "$errorStart File $input not found !!"
     fi
   fi
 done
