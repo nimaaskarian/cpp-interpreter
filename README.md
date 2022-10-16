@@ -4,8 +4,8 @@ An "interpretor" layer for cpp, written in BASH and uses g++ (gcc) as its compil
 ## Installation
 1. Clone this project: `git clone https://github.com/nimaaskarian/cpp-interpretor`  
 2. Put cpp.sh into your path (`cp cpp-interpretor/cpp.sh /bin/cpp`), or make a function in your shell's rc file like so:  
-`function cpp(){
-    /path/to/cpp-interpretor/cpp.sh $@
+`function cpp(){  
+    /path/to/cpp-interpretor/cpp.sh $@  
 }`
 
 ## Usage
