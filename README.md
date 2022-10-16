@@ -9,9 +9,9 @@ An "interpreter" layer for cpp, compiles your cpp file and shows the output dire
         `sudo apt install build-essential`
 2. Do `g++ -v` to verify the installation. (it shouldn't give you an error)
 3. Clone this project: `git clone https://github.com/nimaaskarian/cpp-interpreter`  
-4. Put cpp.sh into your path (`cp cpp-interpretor/cpp.sh /bin/cpp`), or make a function in your shell's rc file like so:  
+4. Put cpp.sh into your path (`cp cpp-interpreter/cpp.sh /bin/cpp`), or make a function in your shell's rc file like so:  
 `function cpp(){  
-    /path/to/cpp-interpretor/cpp.sh $@  
+    /path/to/cpp-interpreter/cpp.sh $@  
 }`
 
 ## Usage
