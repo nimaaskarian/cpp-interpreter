@@ -1,4 +1,4 @@
-# cpp-interpretor
+# cpp-interpreter
 An "interpreter" layer for cpp, written in BASH and uses g++ (gcc) as its compiler.  
 
 ## Installation
