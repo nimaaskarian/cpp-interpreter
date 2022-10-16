@@ -1,6 +1,12 @@
 # cpp-interpreter
 An "interpreter" layer for cpp, compiles your cpp file and shows the output directly, written in BASH and uses g++ (gcc) as its compiler.  
 
+Without cpp-interpreter 😩            |  With cpp-interpreter 😎
+:-------------------------:|:-------------------------:
+![cpp-interpreter-sc1](https://user-images.githubusercontent.com/88832088/196025282-1bc693e8-5d87-401d-95fb-ef02544ba733.png)  | ![cpp-interpreter-sc2](https://user-images.githubusercontent.com/88832088/196025305-e0bae19f-e202-4d44-8ac7-666946580efb.png)
+
+
+
 ## Installation
 1. Install gcc (If you didn't find your distro, search in your distros docs in how to install):
     - #### Arch (and arch based distros like endeavor, artix)  
