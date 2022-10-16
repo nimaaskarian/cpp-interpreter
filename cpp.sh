@@ -1,6 +1,6 @@
 #!/bin/bash
-errorStart="cpp-interpreter Error: "
-logStart="cpp-interpreter: "
+errorStart="> cpp-interpreter Error: "
+logStart="> cpp-interpreter: "
 noFileError="$errorStart No files passed !!"
 
 if [ $# -eq 0 ]; then
@@ -40,7 +40,6 @@ do
       if [ $? -eq 0 ]; then 
         echo "$logStart running $input"
         "$output"
-        printf "\n"
       fi
     else 
       echo "$errorStart File $input not found !!"
