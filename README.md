@@ -16,4 +16,6 @@ An "interpreter" layer for cpp, compiles your cpp file and shows the output dire
 
 ## Usage
 - You may use this project in any UNIX-based operating system that has g++ in its path.  
-- General usage is like so: `cpp filename.cpp`, or if you want the binary to be created in your current directory, pass `-pwd` option like so: `cpp filename.cpp -pwd` or `cpp -pwd filename.cpp`.
+- General usage is like so: `cpp filename.cpp`.
+- You may also use this command with multiple cpp files: `cpp file1.cpp file2.cpp fileX.cpp whatever.cpp`
+- If you want the binary (or binaries) to be created in your current directory, you can pass `-pwd` option: `cpp -pwd filename.cpp` or `cpp file1.cpp file2.cpp -pwd file3.cpp`.
