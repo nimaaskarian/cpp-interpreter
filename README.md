@@ -1,5 +1,5 @@
 # cpp-interpreter
-An "interpreter" layer for cpp, written in BASH and uses g++ (gcc) as its compiler.  
+An "interpreter" layer for cpp, compiles your cpp file and shows the output directly, written in BASH and uses g++ (gcc) as its compiler.  
 
 ## Installation
 1. Clone this project: `git clone https://github.com/nimaaskarian/cpp-interpreter`  
