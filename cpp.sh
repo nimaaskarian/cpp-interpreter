@@ -39,7 +39,6 @@ do
       fi
     else 
       echo "File $input not found !!"
-      exit 1
     fi
   fi
 done
