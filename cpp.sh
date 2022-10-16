@@ -1,5 +1,5 @@
 #!/bin/bash
-errorStart="> cpp-interpreter Error: "
+errorStart="> cpp-interpreter error: "
 logStart="> cpp-interpreter: "
 noFileError="$errorStart No files passed !!"
 
@@ -38,7 +38,7 @@ do
       fi
       g++ "$input" -o "$output"
       if [ $? -eq 0 ]; then 
-        echo "$logStart running $input"
+        echo "$logStart Running $input"
         "$output"
       fi
     else 
