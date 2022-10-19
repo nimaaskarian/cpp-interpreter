@@ -8,7 +8,7 @@ Without cpp-interpreter 😩            |  With cpp-interpreter 😎
 
 
 ## Installation
-1. Install gcc (If you didn't find your distro, search in your distros docs in how to install):
+1. Install gcc (If you didn't find your distro, consult in your distro's docs in how to install):
     - #### Arch (and arch based distros like endeavor, artix)  
         `sudo pacman -S gcc`
     - #### Debian (and debian/ubuntu based distros like mint)  
