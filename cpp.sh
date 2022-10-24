@@ -11,6 +11,7 @@ fi
 for arg in "$@"
 do 
   if [[ "$arg" == "-pwd" ]]; then
+    isPwd=1
     dir=$PWD
   fi
 done
@@ -32,7 +33,11 @@ do
       if [[ $dir == "" ]]; then
         dir=/tmp/cpp-interpreter
       fi
-      output=$dir/${input%.*}
+      trimmedInput=${input#*/}
+      output=$dir/${trimmedInput%.*}
+      if [[ isPwd -eq 1 ]]; then
+        output=$dir/${input%.*}
+      fi
       if [ ! -d $dir ]; then
         mkdir $dir
       fi
