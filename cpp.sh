@@ -33,7 +33,7 @@ do
       if [[ $dir == "" ]]; then
         dir=/tmp/cpp-interpreter
       fi
-      trimmedInput=${input#*/}
+      trimmedInput=$(basename -- "$input")
       output=$dir/${trimmedInput%.*}
       if [[ isPwd -eq 1 ]]; then
         output=$dir/${input%.*}
