@@ -25,3 +25,6 @@ Without cpp-interpreter 😩            |  With cpp-interpreter 😎
 - General usage is like so: `cpp filename.cpp`.
 - You may also use this command with multiple cpp files: `cpp file1.cpp file2.cpp fileX.cpp whatever.cpp`
 - If you want the binary (or binaries) to be created in your current directory, you can pass `-pwd` option: `cpp -pwd filename.cpp` or `cpp file1.cpp file2.cpp -pwd file3.cpp`.
+
+## WHY?
+It's easier this way, specially if you're new to cpp and trying to figure out whats going on.
