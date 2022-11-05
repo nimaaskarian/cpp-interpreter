@@ -87,8 +87,11 @@ def run(file,fullname):
     try:
         subprocess.run([file])
     except: 
-        if not quite:
-            print("\n"+running_error_msg)
+        try:
+            subprocess.run(["./"+file])
+        except:
+            if not quite:
+                print("\n"+running_error_msg)
 
 def compile(inputs,output,filename):
     start_time = time.time()
