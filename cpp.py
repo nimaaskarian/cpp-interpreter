@@ -10,7 +10,6 @@ args = sys.argv[1:]
 quite = "-q" in args
 more_minimal = "-M" in args
 def init():
-    dir = default_dir
     defined_args=["-wd", "-m","-M", "-q", "-j","-h","--help"]
     if "-h" in args or "--help" in args or len(args) == 0:
         print("""Usage: cpy [FILES...] [OPTIONS...]
@@ -25,11 +24,9 @@ Application Options:
 -wd          Export binary in working directory""")
         return
 
-    if not os.path.exists(dir) and not "-wd" in args:
-        os.makedirs(dir)
-
     if "-j" in args:
         files = [arg for arg in args if arg not in defined_args]
+        dir = make_dir_name(files[0])
         print_name = make_print_name(files)
         run(compile(files,make_compile_path(dir, files[0]),print_name),print_name)
     else:
@@ -40,6 +37,7 @@ Application Options:
             if not os.path.exists(arg):
                 print(filenotfound_error_msg.format(print_name))
                 continue
+            dir = make_dir_name(arg)
 
             run(compile([arg],make_compile_path(dir, arg),print_name),print_name)
 class bcolors:
@@ -65,7 +63,10 @@ running_error_msg = error_msg.format("smth went wrong in running")
 
 def make_dir_name(path):
     if "-wd" in args: return os.path.dirname(path)
+    if not os.path.exists(default_dir):
+        os.makedirs(default_dir)
     return default_dir
+
 
 def make_print_name(paths):
     if "-m" in args: 
