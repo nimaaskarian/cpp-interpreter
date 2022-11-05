@@ -29,12 +29,12 @@ Application Options:
 
     if "-j" in args:
         files = [arg for arg in args if arg not in defined_args]
-        print_name = make_print_name(files[0])
+        print_name = make_print_name(files)
         run(compile(files,make_compile_path(dir, files[0]),print_name),print_name)
     else:
         for arg in args:
             if arg in defined_args: continue
-            print_name = make_print_name(arg)
+            print_name = make_print_name([arg])
 
             if not os.path.exists(arg):
                 print(filenotfound_error_msg.format(print_name))
@@ -66,9 +66,10 @@ def make_dir_name(path):
     if "-wd" in args: return os.path.dirname(path)
     return default_dir
 
-def make_print_name(path):
-    if "-m" in args: return os.path.basename(path)
-    return path
+def make_print_name(paths):
+    if "-m" in args: 
+        return ", ".join([os.path.basename(path) for path in paths])
+    return ", ".join(paths)
 
 def make_compile_path(dir,path):
     filename=os.path.basename(path)
