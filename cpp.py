@@ -12,10 +12,11 @@ more_minimal = "-M" in args
 def init():
     dir = default_dir
     defined_args=["-wd", "-m","-M", "-q", "-j","-h","--help"]
-    if "-h" in args or "--help" in args:
+    if "-h" in args or "--help" in args or len(args) == 0:
         print("""Usage: cpy [FILES...] [OPTIONS...]
 Help Option:
 -h           Shows help options
+
 Application Options:
 -m           Minimal file paths
 -M           Don't show compile info
