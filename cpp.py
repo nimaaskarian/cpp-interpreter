@@ -19,7 +19,7 @@ def init():
                 if (line):
                     f.write(line)
         except KeyboardInterrupt:
-            print("\n"+info_msg.format('Ended!'))
+            print("\n"+info_msg.format('recieving inputs ended'))
         f.close()
         args.append(filename)
     if "-h" in args or "--help" in args or len(args) == 0:
