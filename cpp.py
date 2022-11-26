@@ -12,7 +12,6 @@ more_minimal = "-M" in args
 def init():
     defined_args=["-wd", "-m","-M", "-q", "-j","-h","--help","--stdin"]
     if ("--stdin" in args):
-        output = ""
         filename = "/tmp/cpy-stdin-"+str(time.time())+".cpp"
         f = open(filename, "a")
         try:
