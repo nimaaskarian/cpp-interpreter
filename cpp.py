@@ -10,7 +10,19 @@ args = sys.argv[1:]
 quite = "-q" in args
 more_minimal = "-M" in args
 def init():
-    defined_args=["-wd", "-m","-M", "-q", "-j","-h","--help"]
+    defined_args=["-wd", "-m","-M", "-q", "-j","-h","--help","--stdin"]
+    if ("--stdin" in args):
+        output = ""
+        filename = "/tmp/cpy-stdin-"+str(time.time())+".cpp"
+        f = open(filename, "a")
+        try:
+            for line in sys.stdin:
+                if (line):
+                    f.write(line)
+        except KeyboardInterrupt:
+            print("\n"+info_msg.format('Ended!'))
+        f.close()
+        args.append(filename)
     if "-h" in args or "--help" in args or len(args) == 0:
         print("""Usage: cpy [FILES...] [OPTIONS...] [G++ OPTIONS...]
 
@@ -46,6 +58,9 @@ G++ Options:
             dir = make_dir_name(arg)
 
             run(compile([arg],make_compile_path(dir, arg),print_name),print_name)
+    if ("--stdin" in args):
+        os.remove(filename)
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
