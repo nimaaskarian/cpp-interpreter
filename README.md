@@ -15,16 +15,14 @@ Without cpp-interpreter 😩            |  With cpp-interpreter 😎
         `sudo apt install build-essential`
 2. Do `g++ -v` to verify the installation. (it shouldn't give you an error)
 3. Clone this project: `git clone https://github.com/nimaaskarian/cpp-interpreter`  
-4. Put cpp.sh into your path (`cp cpp-interpreter/cpp.sh /bin/cpp`), or make a function in your shell's rc file like so:  
-`function cpp(){  
-    /path/to/cpp-interpreter/cpp.sh $@  
-}`
+4. Put cpp.py into your path (`cp cpp-interpreter/cpp.py /bin/cpy`), or make a function in your shell's rc file like so:  
+`alias cpy=/path/to/cpp-interpreter/cpp.py`
 
 ## Usage
 - You may use this project in any UNIX-based operating system that has g++ in its path.  
-- General usage is like so: `cpp filename.cpp`.
-- You may also use this command with multiple cpp files: `cpp file1.cpp file2.cpp fileX.cpp whatever.cpp`
-- If you want the binary (or binaries) to be created in your current directory, you can pass `-pwd` option: `cpp -pwd filename.cpp` or `cpp file1.cpp file2.cpp -pwd file3.cpp`.
+- General usage is like so: `cpy filename.cpp`.
+- use `--help` or `-h` option to see help options.
 
-## WHY?
-It's easier this way, specially if you're new to cpp and trying to figure out whats going on.
+## Why?
+- It's easier this way, specially if you're new to cpp and trying to figure out whats going on.
+- It won't create annoying binaries in your git repository, that you will need to delete everytime you want to commit.
