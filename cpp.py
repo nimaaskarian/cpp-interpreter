@@ -27,19 +27,20 @@ def init():
         print("""Usage: cpy [FILES...] [OPTIONS...] [G++ OPTIONS...]
 
 Help Option:
-    -h           Shows help options
+  -h, --help         Shows help options
 
 Application Options:
-    -m           Minimal file paths
-    -M           Don't show compile info
-    -j           Compile FILES into one binary
-    -q           Quite (no messages)
-    -wd          Export binary in working directory
+  -m                 Minimal file paths
+  -M                 Don't show compile info
+  -j                 Compile FILES into one binary
+  -q                 Quite (no messages)
+  -wd                Export binary in working directory
+  --stdin            Gets input f rom stdin
 
 G++ Options:
-    Any options beside Application Options will be passed to G++ itself. 
-    If you're getting compile errors and you don't know why, its probably an
-    issue with an option.""")
+  Any options beside Application Options will be passed 
+  to G++ itself. If you're getting compile errors and you
+  don't know why, its probably an issue with an option.""")
         return
 
     if "-j" in args:
