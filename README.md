@@ -23,6 +23,13 @@ Without cpp-interpreter 😩            |  With cpp-interpreter 😎
 - General usage is like so: `cpy filename.cpp`.
 - use `--help` or `-h` option to see help options.
 
+## Uninstall
+1. Remove from path
+    - Remove alias definition from your rc file.
+    - Or if you did the cp or symlink, use `rm /bin/cpy`
+2. Go where you did the `git clone https://github.com/nimaaskarain/cpp-interpreter` and `rm -rf cpp-interpreter`
+3. please don't do this this is a good script :(
+
 ## Why?
 - It's easier this way, specially if you're new to cpp and trying to figure out whats going on.
 - It won't create annoying binaries in your git repository, that you will need to delete everytime you want to commit.
