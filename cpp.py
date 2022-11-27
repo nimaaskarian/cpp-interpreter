@@ -9,9 +9,9 @@ default_dir = "/tmp/cpp-interpreter"
 args = sys.argv[1:]
 quite = "-q" in args
 more_minimal = "-M" in args
-clang = "--clang" in args
+gcc = "--gcc" in args
 def init():
-    defined_args=["-wd", "-m","-M", "-q", "-j","-h","--help","--stdin","--clang"]
+    defined_args=["-wd", "-m","-M", "-q", "-j","-h","--help","--stdin","--gcc"]
     if ("--stdin" in args):
         filename = "/tmp/cpy-stdin-"+str(time.time())+".cpp"
         f = open(filename, "a")
@@ -37,7 +37,7 @@ Application Options:
   -wd                Export binary in working directory
   -sd                Export binary in same directory as .cpp file
   --stdin            Gets input f rom stdin
-  --clang            Use gcc instead of g++ (for c language)
+  --gcc            Use gcc instead of g++ (for c language)
 
 G++ Options:
   Any options beside Application Options will be passed 
@@ -122,7 +122,7 @@ def compile(inputs,output,filename):
     start_time = time.time()
     if not quite and not more_minimal:
         print(compiling_msg.format(filename)+bcolors.ENDC)
-    compiler = "gcc" if clang else "g++"
+    compiler = "gcc" if gcc else "g++"
     child = subprocess.Popen([compiler] + inputs + ["-o", output ],stdout=subprocess.PIPE)
     child.communicate()
     if child.returncode != 0:
