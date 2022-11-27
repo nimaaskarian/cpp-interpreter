@@ -15,8 +15,8 @@ Without cpp-interpreter 😩            |  With cpp-interpreter 😎
         `sudo apt install build-essential`
 2. Do `g++ -v` to verify the installation. (it shouldn't give you an error)
 3. Clone this project: `git clone https://github.com/nimaaskarian/cpp-interpreter`  
-4. Put cpp.py into your path (`cp cpp-interpreter/cpp.py /bin/cpy`), or make a function in your shell's rc file like so:  
-`alias cpy=/path/to/cpp-interpreter/cpp.py`
+4. Put cpp.py into your path (`cp cpp-interpreter/cpp.py /bin/cpy` or do a symlink: `ln -sr cpp-interpreter/cpp.py /bin/cpy`), or make a function in your shell's rc file like so:  
+`alias cpy=/absolute/path/to/cpp-interpreter/cpp.py`
 
 ## Usage
 - You may use this project in any UNIX-based operating system that has g++ in its path.  
