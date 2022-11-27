@@ -9,8 +9,9 @@ default_dir = "/tmp/cpp-interpreter"
 args = sys.argv[1:]
 quite = "-q" in args
 more_minimal = "-M" in args
+clang = "--clang" in args
 def init():
-    defined_args=["-wd", "-m","-M", "-q", "-j","-h","--help","--stdin"]
+    defined_args=["-wd", "-m","-M", "-q", "-j","-h","--help","--stdin","--clang"]
     if ("--stdin" in args):
         filename = "/tmp/cpy-stdin-"+str(time.time())+".cpp"
         f = open(filename, "a")
@@ -34,7 +35,9 @@ Application Options:
   -j                 Compile FILES into one binary
   -q                 Quite (no messages)
   -wd                Export binary in working directory
+  -sd                Export binary in same directory as .cpp file
   --stdin            Gets input f rom stdin
+  --clang            Use gcc instead of g++ (for c language)
 
 G++ Options:
   Any options beside Application Options will be passed 
@@ -80,10 +83,12 @@ compiled_msg = info_msg.format("compiled in {}")
 error_msg = bcolors.FAIL+"ERROR: {}"
 filenotfound_error_msg = error_msg.format("file '{}' not found")
 compile_error_msg = error_msg.format("compile failed")
-running_error_msg = error_msg.format("smth went wrong in running")
+running_error_msg = error_msg.format("something went wrong in running")
+interrupt_error_msg = error_msg.format("user keyboard interrupt")
 
 def make_dir_name(path):
-    if "-wd" in args: return os.path.dirname(path)
+    if "-sd" in args: return os.path.dirname(path)
+    if "-wd" in args: return os.path.dirname("./")
     if not os.path.exists(default_dir):
         os.makedirs(default_dir)
     return default_dir
@@ -106,18 +111,19 @@ def run(file,fullname):
         print(running_msg.format(fullname)+bcolors.ENDC)
     try:
         subprocess.run([file])
-    except: 
-        try:
-            subprocess.run(["./"+file])
-        except:
-            if not quite:
-                print("\n"+running_error_msg)
+    except KeyboardInterrupt: 
+        if not quite:
+            print("\n"+interrupt_error_msg)
+    except Exception:
+        if not quite:
+            print("\n"+running_error_msg)
 
 def compile(inputs,output,filename):
     start_time = time.time()
     if not quite and not more_minimal:
         print(compiling_msg.format(filename)+bcolors.ENDC)
-    child = subprocess.Popen(["g++"] + inputs + ["-o", output ],stdout=subprocess.PIPE)
+    compiler = "gcc" if clang else "g++"
+    child = subprocess.Popen([compiler] + inputs + ["-o", output ],stdout=subprocess.PIPE)
     child.communicate()
     if child.returncode != 0:
         if not quite:
