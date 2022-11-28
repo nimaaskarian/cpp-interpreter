@@ -5,7 +5,7 @@ import os
 import time
 
 default_dir = "/tmp/cpp-interpreter"
-defined_args=["-wd", "-m","-M", "-q", "-j","-h","-r","--help","--stdin","--gcc","--repeat"]
+defined_args=["-sd", "-wd", "-m","-M", "-q", "-j","-h","-r","--help","--stdin","--gcc","--repeat"]
 
 args = sys.argv[1:]
 def init():
@@ -17,11 +17,11 @@ def init():
                 if (line):
                     f.write(line)
         except KeyboardInterrupt:
-            print("\n"+info_msg.format('recieving inputs ended'))
+            conPrint("\n"+info_msg.format('recieving inputs ended'))
         f.close()
         args.append(filename)
     if hasArgs(["-h", "--help"]) or len(args) == 0:
-        print("""Usage: cpy [FILES...] [OPTIONS...] [G++ OPTIONS...]
+        conPrint("""Usage: cpy [FILES...] [OPTIONS...] [G++ OPTIONS...]
 
 Help Option:
   -h, --help         Shows help options
@@ -54,12 +54,11 @@ G++ Options:
             print_name = make_print_name([arg])
 
             if not os.path.exists(arg):
-                print(filenotfound_error_msg.format(print_name))
-                return 1
+                conPrint(filenotfound_error_msg.format(print_name))
                 continue
             dir = make_dir_name(arg)
-
             run(compile([arg],make_compile_path(dir, arg),print_name),print_name)
+
     if (hasArgs("--stdin")):
         os.remove(filename)
 
@@ -146,6 +145,6 @@ def conPrint(*messages):
 
 
 while True:
-    error = init()
-    if error == 1 or not hasArgs(["-r","--repeat"]):
+    init()
+    if not hasArgs(["-r","--repeat"]):
         break
