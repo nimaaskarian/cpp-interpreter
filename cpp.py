@@ -7,11 +7,8 @@ import time
 default_dir = "/tmp/cpp-interpreter"
 
 args = sys.argv[1:]
-quite = "-q" in args
-more_minimal = "-M" in args
-gcc = "--gcc" in args
 def init():
-    defined_args=["-wd", "-m","-M", "-q", "-j","-h","--help","--stdin","--gcc"]
+    defined_args=["-wd", "-m","-M", "-q", "-j","-h","-r","--help","--stdin","--gcc","--repeat"]
     if ("--stdin" in args):
         filename = "/tmp/cpy-stdin-"+str(time.time())+".cpp"
         f = open(filename, "a")
@@ -23,7 +20,7 @@ def init():
             print("\n"+info_msg.format('recieving inputs ended'))
         f.close()
         args.append(filename)
-    if "-h" in args or "--help" in args or len(args) == 0:
+    if hasArgs(["-h", "--help"]) or len(args) == 0:
         print("""Usage: cpy [FILES...] [OPTIONS...] [G++ OPTIONS...]
 
 Help Option:
@@ -37,7 +34,8 @@ Application Options:
   -wd                Export binary in working directory
   -sd                Export binary in same directory as .cpp file
   --stdin            Gets input f rom stdin
-  --gcc            Use gcc instead of g++ (for c language)
+  --gcc              Use gcc instead of g++ (for c language)
+  -r,--repeat        Repeats compiling and running. hit ^C repeatedly to abort
 
 G++ Options:
   Any options beside Application Options will be passed 
@@ -57,6 +55,7 @@ G++ Options:
 
             if not os.path.exists(arg):
                 print(filenotfound_error_msg.format(print_name))
+                return 1
                 continue
             dir = make_dir_name(arg)
 
@@ -87,15 +86,15 @@ running_error_msg = error_msg.format("something went wrong in running")
 interrupt_error_msg = error_msg.format("user keyboard interrupt")
 
 def make_dir_name(path):
-    if "-sd" in args: return os.path.dirname(path)
-    if "-wd" in args: return os.path.dirname("./")
+    if hasArgs("-sd"): return os.path.dirname(path)
+    if hasArgs("-wd"): return os.path.dirname("./")
     if not os.path.exists(default_dir):
         os.makedirs(default_dir)
     return default_dir
 
 
 def make_print_name(paths):
-    if "-m" in args: 
+    if hasArgs("-m"): 
         return ", ".join([os.path.basename(path) for path in paths])
     return ", ".join(paths)
 
@@ -107,31 +106,42 @@ def make_compile_path(dir,path):
 
 def run(file,fullname):
     if file == "": return
-    if not quite:
-        print(running_msg.format(fullname)+bcolors.ENDC)
+    conPrint(running_msg.format(fullname)+bcolors.ENDC)
     try:
         subprocess.run([file])
     except KeyboardInterrupt: 
-        if not quite:
-            print("\n"+interrupt_error_msg)
+        conPrint("\n"+interrupt_error_msg)
     except Exception:
-        if not quite:
-            print("\n"+running_error_msg)
+        conPrint("\n"+running_error_msg)
 
 def compile(inputs,output,filename):
     start_time = time.time()
-    if not quite and not more_minimal:
-        print(compiling_msg.format(filename)+bcolors.ENDC)
-    compiler = "gcc" if gcc else "g++"
+    conPrint(compiling_msg.format(filename)+bcolors.ENDC)
+    compiler = "gcc" if hasArgs("--gcc") else "g++"
     child = subprocess.Popen([compiler] + inputs + ["-o", output ],stdout=subprocess.PIPE)
     child.communicate()
     if child.returncode != 0:
-        if not quite:
-            print(compile_error_msg)
+        conPrint(compile_error_msg)
         return ""
 
-    if not quite and not more_minimal:
-        print(compiled_msg.format(str(round((time.time()-start_time)*1000)/1000) + "s")+bcolors.ENDC)
+    if not hasArgs("-M"):
+        conPrint(compiled_msg.format(str(round((time.time()-start_time)*1000)/1000) + "s")+bcolors.ENDC)
     return output
 
-init()
+def hasArgs(input):
+    # check if input is a list
+    if type(input) != list: return input in args
+    # input its a list here
+    for item in input:
+        if item in args: return True
+    return False
+
+def conPrint(*messages):
+    if not hasArgs("-q"):
+        print(*messages)
+
+
+while True:
+    error = init()
+    if error == 1 or not hasArgs(["-r","--repeat"]):
+        break
