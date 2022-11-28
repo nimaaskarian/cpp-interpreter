@@ -5,11 +5,11 @@ import os
 import time
 
 default_dir = "/tmp/cpp-interpreter"
+defined_args=["-wd", "-m","-M", "-q", "-j","-h","-r","--help","--stdin","--gcc","--repeat"]
 
 args = sys.argv[1:]
 def init():
-    defined_args=["-wd", "-m","-M", "-q", "-j","-h","-r","--help","--stdin","--gcc","--repeat"]
-    if ("--stdin" in args):
+    if (hasArgs("--stdin")):
         filename = "/tmp/cpy-stdin-"+str(time.time())+".cpp"
         f = open(filename, "a")
         try:
@@ -43,7 +43,7 @@ G++ Options:
   don't know why, its probably an issue with an option.""")
         return
 
-    if "-j" in args:
+    if hasArgs("-j"):
         files = [arg for arg in args if arg not in defined_args]
         dir = make_dir_name(files[0])
         print_name = make_print_name(files)
@@ -60,7 +60,7 @@ G++ Options:
             dir = make_dir_name(arg)
 
             run(compile([arg],make_compile_path(dir, arg),print_name),print_name)
-    if ("--stdin" in args):
+    if (hasArgs("--stdin")):
         os.remove(filename)
 
 class bcolors:
@@ -130,9 +130,13 @@ def compile(inputs,output,filename):
 
 def hasArgs(input):
     # check if input is a list
-    if type(input) != list: return input in args
+    doesntExist = Exception(error_msg.format(f"Argument {input} doesn't exist"))
+    if type(input) != list: 
+        if not input in defined_args: raise doesntExist
+        return input in args
     # input its a list here
     for item in input:
+        if not item in defined_args: raise doesntExist
         if item in args: return True
     return False
 
