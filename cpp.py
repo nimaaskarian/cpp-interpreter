@@ -5,7 +5,7 @@ import os
 import time
 
 default_dir = "/tmp/cpp-interpreter"
-defined_args=["-sd", "-wd", "-m","-M", "-q", "-j","-h","-r","--help","--stdin","--gcc","--repeat"]
+defined_args=["-sd", "-wd", "-m","-M", "-q", "-j","-h","-r","--help","--stdin","--gcc","--repeat", "-cl"]
 
 args = sys.argv[1:]
 def init():
@@ -33,6 +33,7 @@ Application Options:
   -q                 Quite (no messages)
   -wd                Export binary in working directory
   -sd                Export binary in same directory as .cpp file
+  -cl                Save output to clipboard (xclip)
   --stdin            Gets input f rom stdin
   --gcc              Use gcc instead of g++ (for c language)
   -r,--repeat        Repeats compiling and running. hit ^C repeatedly to abort
@@ -107,7 +108,10 @@ def run(file,fullname):
     if file == "": return
     conPrint(running_msg.format(fullname)+bcolors.ENDC)
     try:
-        subprocess.run([file])
+        result = subprocess.run([file], stdout=subprocess.PIPE)
+        print(result.stdout.decode('utf-8'))
+        if (hasArgs("-cl")):
+            subprocess.run(["xclip" ,"-se" , "c"],input=result.stdout)                        
     except KeyboardInterrupt: 
         conPrint("\n"+interrupt_error_msg)
     except Exception:
