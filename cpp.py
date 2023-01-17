@@ -49,7 +49,6 @@ G++ Options:
         files = [arg for arg in args if arg not in defined_args]
         dir = make_dir_name(files[0])
         print_name = make_print_name(files)
-        print(os.path.join(dir, make_compound_hash(files)))
         return run(compile(files,os.path.join(dir, make_compound_hash(files)),print_name),print_name)
     else:
         files=[arg for arg in args if arg not in defined_args and not arg.startswith("-")]
@@ -58,7 +57,6 @@ G++ Options:
             if file in defined_args: continue
             print_name = make_print_name([file])
 
-            print("file:", file)
             if not os.path.exists(file):
                 conPrint(filenotfound_error_msg.format(print_name))
                 continue
