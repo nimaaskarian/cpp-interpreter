@@ -6,9 +6,13 @@ import time
 import hashlib
 
 default_dir = "/tmp/cpp-interpreter/"
-defined_args=["-sd", "-wd", "-m","-M", "-q", "-j","-h","-r","--help","--stdin","--gcc","--repeat","--force"]
+defined_args=["-sd", "-wd","--pkg", "-m","-M", "-q", "-j","-h","-r","--help","--stdin","--gcc","--repeat","--force"]
 
 args = sys.argv[1:]
+if "--pkg" in args:
+    pkgIndex=args.index("--pkg")+1
+    pkgs=args[pkgIndex]
+    args=args[0:pkgIndex]+args[pkgIndex+1:]
 def init():
     if (hasArgs("--stdin")):
         filename = "/tmp/cpy-stdin-"+str(time.time())+".cpp"
@@ -35,6 +39,7 @@ Application Options:
   -wd                Export binary in working directory
   -sd                Export binary in same directory as .cpp file
   --force            Force recompile
+  --pkg              Append pkg-config flag and libs to compiler
   --stdin            Gets input f rom stdin
   --gcc              Use gcc instead of g++ (for c language)
   -r,--repeat        Repeats compiling and running. hit ^C repeatedly to abort
@@ -147,6 +152,9 @@ def compile(inputs,output,filename,compile_args=[]):
     start_time = time.time()
     conPrint(compiling_msg.format(filename)+bcolors.ENDC)
     compiler = "gcc" if hasArgs("--gcc") else "g++"
+    if hasArgs("--pkg"):
+        compile_args += subprocess.check_output("pkg-config --cflags "+pkgs, shell=True).split()
+        compile_args += subprocess.check_output("pkg-config --libs "+pkgs, shell=True).split()
     child = subprocess.Popen([compiler] +compile_args+ inputs +   ["-o", output ],stdout=subprocess.PIPE)
     child.communicate()
     if child.returncode != 0:
