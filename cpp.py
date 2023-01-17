@@ -3,9 +3,10 @@ import sys
 import subprocess
 import os
 import time
+import hashlib
 
-default_dir = "/tmp/cpp-interpreter"
-defined_args=["-sd", "-wd", "-m","-M", "-q", "-j","-h","-r","--help","--stdin","--gcc","--repeat"]
+default_dir = "/tmp/cpp-interpreter/"
+defined_args=["-sd", "-wd", "-m","-M", "-q", "-j","-h","-r","--help","--stdin","--gcc","--repeat","--force"]
 
 args = sys.argv[1:]
 def init():
@@ -33,6 +34,7 @@ Application Options:
   -q                 Quite (no messages)
   -wd                Export binary in working directory
   -sd                Export binary in same directory as .cpp file
+  --force            Force recompile
   --stdin            Gets input f rom stdin
   --gcc              Use gcc instead of g++ (for c language)
   -r,--repeat        Repeats compiling and running. hit ^C repeatedly to abort
@@ -47,17 +49,21 @@ G++ Options:
         files = [arg for arg in args if arg not in defined_args]
         dir = make_dir_name(files[0])
         print_name = make_print_name(files)
-        run(compile(files,make_compile_path(dir, files[0]),print_name),print_name)
+        print(os.path.join(dir, make_compound_hash(files)))
+        return run(compile(files,os.path.join(dir, make_compound_hash(files)),print_name),print_name)
     else:
-        for arg in args:
-            if arg in defined_args: continue
-            print_name = make_print_name([arg])
+        files=[arg for arg in args if arg not in defined_args and not arg.startswith("-")]
+        compiler_args=[arg for arg in args if arg not in defined_args and arg.startswith("-")]
+        for file in files:
+            if file in defined_args: continue
+            print_name = make_print_name([file])
 
-            if not os.path.exists(arg):
+            print("file:", file)
+            if not os.path.exists(file):
                 conPrint(filenotfound_error_msg.format(print_name))
                 continue
-            dir = make_dir_name(arg)
-            run(compile([arg],make_compile_path(dir, arg),print_name),print_name)
+            dir = make_dir_name(file)
+            return run(compile([file],make_compile_path(dir, file),print_name,compiler_args),print_name)
 
     if (hasArgs("--stdin")):
         os.remove(filename)
@@ -79,10 +85,11 @@ compiling_msg = info_msg.format("compiling: {}")
 compiled_msg = info_msg.format("compiled in {}")
 
 error_msg = bcolors.FAIL+"ERROR: {}"
+# warning_msg = bcolors.WARNING+"WARNING: {}"
 filenotfound_error_msg = error_msg.format("file '{}' not found")
 compile_error_msg = error_msg.format("compile failed")
 running_error_msg = error_msg.format("something went wrong in running")
-interrupt_error_msg = error_msg.format("user keyboard interrupt")
+interrupt_error_msg = error_msg.format("user keyboard interrupt (exited)")
 
 def make_dir_name(path):
     if hasArgs("-sd"): return os.path.dirname(path)
@@ -91,6 +98,17 @@ def make_dir_name(path):
         os.makedirs(default_dir)
     return default_dir
 
+def make_compound_hash(files):
+        hash = ""
+        files.sort()
+        for file in files:
+            if hash:
+                hash+="-"
+            hash+=file_hash(file)
+        return hash
+def file_hash(path):
+    f=open(path, "r")
+    return hashlib.md5( f.read().encode() ).hexdigest()
 
 def make_print_name(paths):
     if hasArgs("-m"): 
@@ -98,26 +116,40 @@ def make_print_name(paths):
     return ", ".join(paths)
 
 def make_compile_path(dir,path):
-    filename=os.path.basename(path)
-    filename_without_ext = os.path.splitext(filename)[0]
-    return os.path.join(dir, filename_without_ext)
+    # filename=os.path.basename(path)
+    # filename_without_ext = os.path.splitext(filename)[0]
+    return os.path.join(dir, file_hash(path))
     
 
 def run(file,fullname):
     if file == "": return
     conPrint(running_msg.format(fullname)+bcolors.ENDC)
+    code=1
     try:
         subprocess.run([file])
+        code=0
     except KeyboardInterrupt: 
         conPrint("\n"+interrupt_error_msg)
+        code=1
     except Exception:
         conPrint("\n"+running_error_msg)
+    finally: return code
 
-def compile(inputs,output,filename):
+def compile(inputs,output,filename,compile_args=[]):
+
+    if not hasArgs("--force"):
+        if hasArgs("-j"):
+            if (os.path.isfile(default_dir+make_compound_hash(inputs))):
+                return output
+        else:
+            inputs = [ input for input in inputs if not os.path.isfile(default_dir+file_hash(input))]
+
+    if not len(inputs):
+        return output
     start_time = time.time()
     conPrint(compiling_msg.format(filename)+bcolors.ENDC)
     compiler = "gcc" if hasArgs("--gcc") else "g++"
-    child = subprocess.Popen([compiler] + inputs + ["-o", output ],stdout=subprocess.PIPE)
+    child = subprocess.Popen([compiler] +compile_args+ inputs +   ["-o", output ],stdout=subprocess.PIPE)
     child.communicate()
     if child.returncode != 0:
         conPrint(compile_error_msg)
@@ -145,6 +177,7 @@ def conPrint(*messages):
 
 
 while True:
-    init()
+    if init()==1:
+        break
     if not hasArgs(["-r","--repeat"]):
         break
