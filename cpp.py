@@ -40,7 +40,7 @@ Application Options:
   -sd                Export binary in same directory as .cpp file
   --force            Force recompile
   --pkg              Append pkg-config flag and libs to compiler
-  --stdin            Gets input f rom stdin
+  --stdin            Gets input from stdin
   --gcc              Use gcc instead of g++ (for c language)
   -r,--repeat        Repeats compiling and running. hit ^C repeatedly to abort
 
