@@ -46,8 +46,8 @@ Application Options:
 
 G++ Options:
   Any options beside Application Options will be passed 
-  to G++ itself. If you're getting compile errors and you
-  don't know why, its probably an issue with an option.""")
+  to G++ itself when using '-j'. If you're getting compile
+  errors and you don't know why, its probably an issue with an option.""")
         return
 
     if hasArgs("-j"):
