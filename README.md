@@ -1,5 +1,5 @@
 # cpp-interpreter
-An "interpreter" layer for cpp, compiles your cpp file and shows the output directly, written in BASH and uses g++ (gcc) as its compiler.  
+An "interpreter" layer for cpp, compiles your cpp file and shows the output directly, written in BASH/Python3 and uses g++ (gcc) as its compiler.  
 
 Without cpp-interpreter 😩            |  With cpp-interpreter 😎
 :-------------------------:|:-------------------------:
@@ -33,3 +33,4 @@ Without cpp-interpreter 😩            |  With cpp-interpreter 😎
 ## Why?
 - It's easier this way, specially if you're new to cpp and trying to figure out whats going on.
 - It won't create annoying binaries in your git repository, that you will need to delete everytime you want to commit.
+- It may be better to use `make`. But this project will slowly become more.
