@@ -6,17 +6,17 @@ default_dir = "/tmp/cpp-interpreter/"
 
 # args = sys.argv[1:]
 parser = argparse.ArgumentParser(prog=sys.argv[0])
-parser.add_argument('-q', '--quite',dest="quite", action="store_true")
-parser.add_argument('-r', '--repeat',dest="repeat", action="store_true")
-parser.add_argument('-j', '--join',dest="join", action="store_true")
+parser.add_argument('-q', '--quite',dest="quite", action="store_true", help="Don't print messages")
+parser.add_argument('-r', '--repeat',dest="repeat", action="store_true", help="Repeat running/compiling process until user interrupt")
+parser.add_argument('-j', '--join',dest="join", action="store_true", help="Compile files together instead of compiling one by one")
 parser.add_argument('-c', '--compiler=',dest="compiler", action="store",help="backend compiler (default is g++)",default="g++")
 parser.add_argument('-m', '--minimal-paths', dest="minimal", action="store_true",help="Minimal file paths")
 parser.add_argument('-M', '--no-compile-messages', dest="no_compile_messages",
                     action="store_true",help="Don't print compile messages")
 parser.add_argument('-f', '--force', dest="force", action="store_true",help="Force recompile")
-parser.add_argument('-o', '--output=', dest="output", action="store",help="Output name")
-parser.add_argument('-Oc', '--compiler-options=', dest="compiler_options", action="store",help="Compiler options",default=[])
-parser.add_argument('-Or', '--run-options=', dest="run_options", action="store",help="Run options",default=[])
+parser.add_argument('-o', '--output=', dest="output", action="store",help="Output file name")
+parser.add_argument('-Oc', '--compiler-options=', dest="compiler_options", action="store",help="Compiler options (passed to COMPILER)",default=[])
+parser.add_argument('-Or', '--run-options=', dest="run_options", action="store",help="Run options (passed to the binary file)",default=[])
 parser.add_argument('-sd', '--select-directory=', dest="select_directory", action="store",help="Select a directory to compile to",default="")
 parser.add_argument('-wd', '--working-directory', dest="working_directory", action="store_true",help="Compile in working directory")
 parser.add_argument('-', '--stdin', dest="stdin", action="store_true",help="Get input from stdin")
