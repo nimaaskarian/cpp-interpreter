@@ -24,7 +24,7 @@ parser.add_argument('--pkg=', dest="pkg", action="store",help="Append pkg-config
 parser.add_argument('files', nargs='*', action="store")
 args = parser.parse_args()
 
-if len( sys.argv ) <= 1 or not len(args.files):
+if len(sys.argv) <= 1 and not args.quite:
     parser.print_usage()
 def init():
     if (args.stdin):
@@ -44,6 +44,7 @@ def init():
         print_name = make_print_name(args.files)
         return run(compile(args.files,os.path.join(dir, make_compound_hash(args.files)),print_name,dir),print_name)
     else:
+        output=1
         for file in args.files:
             print_name = make_print_name([file])
 
@@ -51,7 +52,8 @@ def init():
                 conPrint(filenotfound_error_msg.format(print_name))
                 continue
             dir = make_dir_name()
-            return run(compile([file],make_compile_path(dir, file),print_name,dir),print_name)
+            output=run(compile([file],make_compile_path(dir, file),print_name,dir),print_name)
+        return output
 
     if (args.stdin):
         os.remove(filename)
