@@ -15,10 +15,10 @@ parser.add_argument('-M', '--no-compile-messages', dest="no_compile_messages",
                     action="store_true",help="Don't print compile messages")
 parser.add_argument('-f', '--force', dest="force", action="store_true",help="Force recompile")
 parser.add_argument('-o', '--output=', dest="output", action="store",help="Output file name")
-parser.add_argument('-Oc', '--compiler-options=', dest="compiler_options", action="store",help="Compiler options (passed to COMPILER)",default=[])
-parser.add_argument('-Or', '--run-options=', dest="run_options", action="store",help="Run options (passed to the binary file)",default=[])
-parser.add_argument('-sd', '--select-directory=', dest="select_directory", action="store",help="Select a directory to compile to",default="")
-parser.add_argument('-wd', '--working-directory', dest="working_directory", action="store_true",help="Compile in working directory")
+parser.add_argument('-C', '--compiler-options=', dest="compiler_options", action="store",help="Compiler options (passed to COMPILER)",default=[])
+parser.add_argument('-R', '--run-options=', dest="run_options", action="store",help="Run options (passed to the binary file)",default=[])
+parser.add_argument('-P', '--parent-directory=', dest="parent_directory", action="store",help="Select a parent directory to compile to",default="")
+parser.add_argument('-w', '--working-directory', dest="working_directory", action="store_true",help="Compile in working directory")
 parser.add_argument('-', '--stdin', dest="stdin", action="store_true",help="Get input from stdin")
 parser.add_argument('--pkg=', dest="pkg", action="store",help="Append pkg-config flag and libs to compiler")
 parser.add_argument('files', nargs='*', action="store")
@@ -80,7 +80,7 @@ running_error_msg = error_msg.format("something went wrong in running")
 interrupt_error_msg = error_msg.format("user keyboard interrupt (exited)")
 
 def make_dir_name():
-    if args.select_directory: return os.path.dirname(args.select_directory)
+    if args.parent_directory: return os.path.dirname(args.parent_directory)
     if args.working_directory: return os.path.dirname("./")
     if not os.path.exists(default_dir):
         os.makedirs(default_dir)
@@ -119,7 +119,7 @@ def run(file,fullname):
     conPrint(running_msg.format(fullname)+bcolors.ENDC)
     code=1
     try:
-        subprocess.run([os.path.join(args.select_directory,file)]+args.run_options)
+        subprocess.run([os.path.join(args.parent_directory,file)]+args.run_options)
         code=0
     except KeyboardInterrupt: 
         conPrint("\n"+interrupt_error_msg)
